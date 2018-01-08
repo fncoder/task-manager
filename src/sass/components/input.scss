@@ -1,0 +1,10 @@
+textarea, input{
+font-family: 'Raleway', sans-serif;
+width:100%;
+border: none;
+position: relative;
+border-bottom: 1px solid $color-border;
+outline:0;
+font-size: rem(15);
+color: $color-font;
+}

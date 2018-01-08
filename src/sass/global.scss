@@ -1,0 +1,37 @@
+/* HELPERS - Base variables, mixins or tools SASS
+========================================================================== */
+
+@import 'helpers/_variables.scss';
+@import 'helpers/_mixins.scss';
+
+
+/* BASE - Default settings
+========================================================================== */
+
+@import 'base/_reset.scss';
+@import 'base/_typography.scss';
+@import 'base/_settings.scss';
+
+/* LAYOUT - Modules as header, footer and other sections
+========================================================================== */
+
+@import 'layout/main.scss';
+
+
+/* COMPONENTS - Re-usable site elements.
+========================================================================== */
+
+@import 'components/sidebar.scss';
+@import 'components/input.scss';
+@import 'components/button.scss';
+@import 'components/active-class.scss';
+@import 'components/message.scss';
+@import 'components/keyframes.scss';
+@import 'components/index.scss';
+
+/* PAGES - Modules as header, footer and other sections
+========================================================================== */
+
+/* VENDORS - Frameworks, libraries SCSS files
+
+========================================================================== */

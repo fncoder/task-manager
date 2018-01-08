@@ -1,0 +1,16 @@
+h1,h2,h3,h4,h5,h6{
+color: $color-font;
+}
+
+h1{
+font-size: rem(84);
+}
+
+h2{
+font-size: rem(19);
+}
+
+p{
+line-height: 1.3;
+font-size: rem(15);
+}

@@ -1,0 +1,17 @@
+*{
+box-sizing: border-box;
+}
+
+body{
+background: #3798DC;
+font-size: 16px;
+font-family: 'Montserrat', sans-serif;
+line-height: 1.2;
+word-wrap: break-word;
+}
+
+.wrapper{
+width:85%;
+margin: 0 auto;
+padding: em(16);
+}

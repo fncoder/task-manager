@@ -14,20 +14,25 @@
 
 /* LAYOUT - Modules as header, footer and other sections
 ========================================================================== */
-
+@import 'layout/sidebar-left.scss';
+@import 'layout/sidebar-right.scss';
 @import 'layout/main.scss';
 
 
 /* COMPONENTS - Re-usable site elements.
 ========================================================================== */
 
-@import 'components/sidebar.scss';
 @import 'components/input.scss';
 @import 'components/button.scss';
 @import 'components/active-class.scss';
 @import 'components/message.scss';
 @import 'components/keyframes.scss';
 @import 'components/index.scss';
+@import 'components/switch.scss';
+@import 'components/info.scss';
+@import 'components/fullscreen.scss';
+@import 'components/settings.scss';
+@import 'components/task.scss';
 
 /* PAGES - Modules as header, footer and other sections
 ========================================================================== */

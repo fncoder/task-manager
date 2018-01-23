@@ -1,17 +1,23 @@
 *{
 box-sizing: border-box;
+padding:0;
+margin:0;
 }
 
 body{
-background: #3798DC;
-font-size: 16px;
+font-size: rem(16);
 font-family: 'Montserrat', sans-serif;
 line-height: 1.2;
 word-wrap: break-word;
+background-color: #ffffff;
+}
+
+body:-webkit-full-screen {
+width: 100%;
+height: 100%;
 }
 
 .wrapper{
 width:85%;
 margin: 0 auto;
-padding: em(16);
 }

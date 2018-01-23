@@ -4,36 +4,56 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="stylesheets/main.css">
+	<link rel="stylesheet" href="stylesheets/main.min.css">
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<title>Document</title>
 </head>
 <body>
 <div class="app">
-	<section class="creator">
-		<form method="post" class="wrapper wrapper--creator">
-			<div class="creator-box creator-box1">
-				<h2 class="creator-box__title">Title</h2>
-				<input type="text" name="title" class="input input--title"></input>
-			</div>
-			<div class="creator-box creator-box2">
-				<h2 class="creator-box__content">Description</h2>
-				<textarea type="text" name="content" class="input input--content"></textarea>
-			</div>
-			<div class="creator-box creator-box3">
-				<h2 class="creator-box__author">Author</h2>
-				<input type="text" name="author" class="input input--author"></input>
-			</div>
-			<button class="btn-submit" type="submit">Create</button>
-		</form>
-	</section>
 	<main class="main-content">
+		<div class="sidebar-right">
+			<section class="creator">
+				<div class="wrapper wrapper--creator">
+				<div class="settings"></div>
+					<div class="switch">
+						<label for="input-switch">
+							<input class="input-switch" id="input-switch" type="checkbox"/>
+							<span class="switch-bar"></span>
+						</label>
+					</div>
+					<form method="post" class="form">
+						<div class="creator-box creator-box1">
+							<h2 class="creator-box__title">Title</h2>
+							<input type="text" name="title" class="input input--title"></input>
+						</div>
+						<div class="creator-box creator-box2">
+							<h2 class="creator-box__content">Content</h2>
+							<textarea type="text" name="content" class="input input--content"></textarea>
+						</div>
+						<div class="creator-box creator-box3">
+							<h2 class="creator-box__author">Author</h2>
+							<input type="text" name="author" class="input input--author"></input>
+						</div>
+						<button class="btn-submit" type="submit">Create</button>
+					</form>
+				</div>
+			</section>
+		</div>
 		<section class="content-area">
 			<div class="message"></div>
-		</section
+			<div class="sidebar-left">
+				<div class="wrapper wrapper--sidebar-left">
+					<p class="sidebar-left-text"><span class="keycode">F2</span> - Enable fullscreen mode</p>
+					<p class="sidebar-left-text"><span class="keycode">Enter</span> - Save changes task</p>
+					<p class="sidebar-left-text"><span class="keycode">Esc</span> - Unsave changes task</p>
+					<p class="sidebar-left-text"><span class="keycode">F4</span> - Switch theme</p>
+					<p class="sidebar-left-text"><span class="keycode">F8/F9</span> - Show/Hide Sidebar</p>
+				</div>
+			</div>
+		</section>
 	</main>
 </div>
-<script src="js/main.js"></script>
+<script src="js/main.min.js"></script>
 </body>
 </html>

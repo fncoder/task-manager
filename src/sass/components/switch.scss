@@ -1,0 +1,33 @@
+.switch{
+width: rem(55);
+height: rem(25);
+border-radius: rem(25);
+position: relative;
+background: rgba(0,0,0,0.07);
+}
+
+.switch-bar{
+height:100%;
+position: absolute;
+top:0;
+left:0;
+border-radius: rem(25);
+width: 50%;
+left:0;
+transition: all 0.5s ease;
+border: 1px solid $color-border;
+background: #ffffff;
+}
+
+.input-switch{
+visibility: hidden;
+}
+
+.input-switch:checked + .switch-bar{
+left:50%;
+}
+
+
+label{
+cursor: pointer;
+}

@@ -4,12 +4,17 @@ var nextID = 0;
 
 function Dashboard(){
   this.globalState = false;
-  this.messages = ['Create new card', 'Delete card', 'Changes saved', 'All fields are required'];
+  this.messages = ['Create new card', 'Delete card', 'Changes saved', 'All fields are required', 'Fullscreen mode is active'];
+  this.theme = {
+    basic: '#3798DC',
+    dark: '#212121'
+  }
   this.area = {
     main: document.querySelector('.main-content'),
     container: document.querySelector('.content-area'),
-    submit: document.querySelector('.btn-submit'),
-    message: document.querySelector('.message')
+    message: document.querySelector('.message'),
+    creator: document.querySelector('.creator'),
+    sidebarLeft: document.querySelector('.sidebar-left')
   }
   this.sidebar = {
     title: document.querySelector('.input--title'),
@@ -19,6 +24,9 @@ function Dashboard(){
   this.buttons = {
     submit: document.querySelector('.btn-submit')
   }
+  this.switch = document.querySelector('.input-switch');
+  this.toggle = document.querySelector('.switch-bar');
+  this.settings = document.querySelector('.settings');
 };
 
 Dashboard.prototype.validate = function(){
@@ -35,7 +43,6 @@ Dashboard.prototype.validate = function(){
       }
     }
     new Task(JSON.stringify(data));
-    this.removeFields();
   }
 }
 
@@ -47,6 +54,49 @@ Dashboard.prototype.removeFields = function(){
   }
 }
 
+Dashboard.prototype.toggleTheme = function(e){
+  if(!this.globalState){
+    if(!this.switch.checked){
+      this.area.main.style.backgroundColor = this.theme.basic;
+    }
+    else{
+      this.area.main.style.backgroundColor = this.theme.dark;
+    }
+
+    this.toggleKeyCode = false;
+
+    if(e.keyCode){
+      if(!this.toggleKeyCode && this.switch.checked){
+        this.area.main.style.backgroundColor = this.theme.basic;
+      }
+      else{
+        this.area.main.style.backgroundColor = this.theme.dark;
+      }
+      this.switch.checked = !this.switch.checked;
+      this.toggleKeyCode = !this.toggleKeyCode;
+    }
+  }
+}
+
+Dashboard.prototype.toggleSidebar = function(e, element, direction){
+  if(!this.globalState){
+    e.preventDefault();
+    if(e.keyCode !== 120){
+    element.classList.toggle('sidebar-'+direction+'-toggle');
+      if(!element.classList.contains('sidebar-'+direction+'-toggle')){
+        element.classList.remove('sidebar-'+direction+'-toggle');
+      }
+
+      else{
+        element.classList.add('sidebar-'+direction+'-toggle');
+      }
+    }
+
+    else{
+      element.classList.toggle('sidebar-'+direction+'-toggle');
+    }
+  }
+}
 Dashboard.prototype.log = function(message){
   for(let i=0; i < this.messages.length; i++){
     if(this.messages.indexOf(message) === i){
@@ -59,8 +109,59 @@ Dashboard.prototype.log = function(message){
   }.bind(this), 3000);
 }
 
+Dashboard.prototype.toggleFullscreen = function(element){
+  if(!document.fullscreenElement || !document.mozFullScreenElement || !document.webkitFullscreenElement || !document.msFullscreenElement){
+    if(element.requestFullscreen) {
+       element.requestFullscreen();
+     } else if(element.mozRequestFullScreen) {
+       element.mozRequestFullScreen();
+     } else if(element.webkitRequestFullscreen) {
+       element.webkitRequestFullscreen();
+     } else if(element.msRequestFullscreen) {
+       element.msRequestFullscreen();
+     }
+  }
+
+  if(document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if(document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if(document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+  else if(document.msExitFullscreen) {
+   document.msExitFullscreen();
+  }
+
+}
 Dashboard.prototype.init = function(){
-  this.validate();
+var self = this;
+  this.buttons.submit.addEventListener('click', function(e){
+    e.preventDefault();
+    self.validate();
+  })
+  this.switch.addEventListener('click', this.toggleTheme.bind(this));
+  document.addEventListener('keydown', function(e){
+    if(e.keyCode === 113){
+      self.toggleFullscreen(document.querySelector('body'));
+    }
+
+    if(e.keyCode === 115){
+      self.toggleTheme(e);
+    }
+
+    if(e.keyCode === 119){
+      self.toggleSidebar(e, self.area.sidebarLeft, 'left');
+    }
+
+    if(e.keyCode === 120){
+      self.toggleSidebar(e, self.area.creator, 'right');
+    }
+  });
+
+  this.settings.addEventListener('click', function(e){
+    self.toggleSidebar(e, self.area.sidebarLeft, 'left');
+  });
 }
 
 function Task(data){
@@ -77,6 +178,8 @@ function Task(data){
   this.currentText = null;
   this.editArea = false;
   this.activeArea = true;
+  this.escape = false;
+  this.saveStr = [];
   this.single = {
     article: document.createElement('article'),
     header: document.createElement('header'),
@@ -89,10 +192,18 @@ function Task(data){
     edit: document.createElement('span'),
     resize: document.createElement('div')
   }
-  this.initTask();
+  this.inputs = {
+    title: document.createElement('h2'),
+    content: document.createElement('p'),
+    author: document.createElement('p')
+  }
+
   tasks.push(this);
   current.push(this.id);
+  this.removeFields();
+  this.init();
 }
+
 
 Task.prototype = Object.create(Dashboard.prototype);
 Task.prototype.constructor = Task;
@@ -103,26 +214,26 @@ Task.prototype.create = function(){
 
   this.single.article.appendChild(this.single.edit);
   this.single.article.appendChild(this.single.header);
-  this.single.article.appendChild(this.single.paragraph);
-  this.single.article.appendChild(this.single.author);
+  this.single.article.appendChild(this.inputs.content);
+  this.single.article.appendChild(this.inputs.author);
   this.single.article.appendChild(this.single.resize);
-  this.single.header.appendChild(this.single.h);
+  this.single.header.appendChild(this.inputs.title);
 
   this.single.resize.classList.add('resize');
   this.single.edit.classList.add('icon-edit');
   this.single.header.classList.add('task-header');
-  this.single.h.classList.add('task-header__title')
-  this.single.paragraph.classList.add('task__text')
-  this.single.author.classList.add('task__author')
+  this.inputs.title.classList.add('task-header__title')
+  this.inputs.content.classList.add('task__text')
+  this.inputs.author.classList.add('task__author')
 
-  this.single.h.appendChild(this.single.hText);
-  this.single.h.appendChild(document.createElement('span'));
+  this.inputs.title.appendChild(this.single.hText);
+  this.inputs.title.appendChild(document.createElement('span'));
 
-  this.single.paragraph.appendChild(this.single.paragraphText);
-  this.single.paragraph.appendChild(document.createElement('span'));
+  this.inputs.content.appendChild(this.single.paragraphText);
+  this.inputs.content.appendChild(document.createElement('span'));
 
-  this.single.author.appendChild(this.single.authorText);
-  this.single.author.appendChild(document.createElement('span'));
+  this.inputs.author.appendChild(this.single.authorText);
+  this.inputs.author.appendChild(document.createElement('span'));
 
   this.single.hText.textContent = this.encodeData.title;
   this.single.paragraphText.textContent = this.encodeData.content
@@ -130,7 +241,6 @@ Task.prototype.create = function(){
 
   this.area.container.appendChild(this.single.article);
 
-  this.removeFields();
   this.log('Create new card');
 }
 
@@ -153,8 +263,8 @@ Task.prototype.pressedMouse = function(e){
 
   if(e.target === this.single.edit){
     this.editArea = !this.editArea;
-    this.current(e);
     this.edit(e);
+    this.currentID(e);
   }
 }
 
@@ -219,71 +329,80 @@ Task.prototype.resize = function(e){
 
 Task.prototype.edit = function(e){
   if(this.editArea){
-    for(var key in this.single){
+    for(var key in this.inputs){
+      if(this.inputs[key] === this.inputs.title && this.activeArea){
+        this.currentNode = this.inputs[key].childNodes;
+        this.currentNode[1].classList.add('index');
+      }
+      ////Unsave string event
+      if(e.keyCode === 27){
+        this.inputs[key].childNodes[0].nodeValue = this.encodeData[key];
+        this.currentNode[1].classList.remove('index');
 
-      if(this.single[key] === this.single.h && this.activeArea){
-        this.activeText = this.single[key].childNodes[0].nodeValue;
-        this.currentText = this.single[key].childNodes;
-
-        this.currentText[1].classList.add('index');
+        this.editArea = false;
+        this.activeArea = true;
       }
 
-      else if(this.single[key] === e.target && this.single[key] !== this.single.edit && this.single[key] !== this.single.resize && this.single[key] !== this.single.article && this.single[key] !== this.single.header){
+      else if (this.inputs[key] === e.target){
+        this.currentNode[1].classList.remove('index');
+        this.currentNode = this.inputs[key].childNodes;
 
-        this.currentText[1].classList.remove('index');
-
-        this.activeText = this.single[key].childNodes[0].nodeValue;
-        this.currentText = this.single[key].childNodes;
-
-        this.currentText[1].classList.add('index')
+        this.currentNode[1].classList.add('index');
         this.activeArea = false;
-
-
-
       }
     }
+      ////Remove string event
+      if(e.keyCode === 8){
+        var sliceText = this.currentNode[0].textContent.slice(0, this.currentNode[0].textContent.length - 1);
+        this.currentNode[0].textContent = sliceText;
+      }
 
-    if(e.keyCode === 8){
-      this.activeText = this.activeText.slice(0, this.activeText.length - 1);
-      this.currentText[0].textContent = this.activeText;
-    }
+      ////Save string event
+      else if(e.keyCode === 13){
+        this.currentNode[1].classList.remove('index');
+          for(var keyData in this.encodeData){
+            this.encodeData[keyData] = this.inputs[keyData].textContent;
+          }
+        this.log('Changes saved');
+        this.editArea = false;
+        this.activeArea = true;
+      }
 
-    else if(e.keyCode === 13){
-      this.currentText[1].classList.remove('index');
-      this.log('Changes saved');
-      this.editArea = false;
-      this.activeArea = true;
-    }
-
-    else if(e.keyCode === 27){
-
-    }
-
-    else if (e.keyCode){
-      var newChar = this.activeText += e.key;
-      this.currentText[0].textContent = newChar;
-    }
+      ////Add string event
+      else if (e.keyCode){
+        var specialChar = ['Escape','CapsLock','Tab','ShiftLeft','ShiftRight','AltLeft','AltRight','ControlLeft','ControlRight','ArrowUp','ArrowLeft','ArrowRight','ArrowDown'];
+        if(specialChar.indexOf(e.code) === -1){
+          this.currentNode[0].textContent += e.key;
+        }
+      }
   }
 
   else{
-    for(var key in this.single){
-      if(this.single[key].childNodes[1]){
-        this.single[key].childNodes[1].classList.remove('index');
+    if(!this.escape){
+      for(var key in this.inputs){
+        this.inputs[key].childNodes[0].nodeValue = this.encodeData[key];
       }
+    }
+
+    for(var key in this.inputs){
+      this.inputs[key].childNodes[1].classList.remove('index');
     }
     this.activeArea = true;
   }
 }
 
-Task.prototype.current = function(e){
+Task.prototype.currentID = function(e){
 var self = this;
   current.forEach(function(value,index){
     if(e.target === self.single.edit){
       if(value === self.id){
-        ///return false;
+        return false;
       }
-
       else{
+        for(var key in tasks[index].inputs){
+          tasks[index].inputs[key].childNodes[0].nodeValue = tasks[index].encodeData[key];
+        }
+
         tasks[index].editArea = false;
         tasks[index].edit();
       }
@@ -291,7 +410,7 @@ var self = this;
   });
 }
 
-Task.prototype.initTask = function(){
+Task.prototype.init = function(){
   this.create();
   this.single.article.addEventListener('mousedown', this.pressedMouse.bind(this));
   document.addEventListener('mouseup', this.mouseUp.bind(this));
@@ -300,8 +419,5 @@ Task.prototype.initTask = function(){
 
 window.addEventListener('load', function(){
   var dashboard = new Dashboard();
-  dashboard.buttons.submit.addEventListener('click', function(e){
-    e.preventDefault();
-    dashboard.init();
-  })
+  dashboard.init();
 })

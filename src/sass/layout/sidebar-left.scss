@@ -1,0 +1,29 @@
+.sidebar-left{
+background: #ffffff;
+max-width: rem(300);
+height:100%;
+position: absolute;
+width:100%;
+left: rem(-300);
+transition: all 0.5s ease;
+box-shadow: 0 0 12px rgba(0,0,0,0.35);
+
+  .wrapper--sidebar-left{
+  padding: rem(30) 0;
+  }
+
+  .sidebar-left-text{
+  color: #585858;
+
+    &:nth-child(1n+2){
+    margin-top: rem(10);
+    }
+  }
+}
+
+.keycode{
+border: 1px solid rgba(0,0,0,0.4);
+border-radius: 3px;
+padding: rem(10);
+display: inline-block;
+}

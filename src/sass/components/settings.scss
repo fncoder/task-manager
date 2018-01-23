@@ -1,0 +1,16 @@
+.settings{
+position: absolute;
+top:rem(28);
+right:rem(25);
+transition: all 0.5s ease;
+  &:before{
+  content: '\f013';;
+  font-family: FontAwesome;
+  color: rgba(0, 0, 0, 0.07);
+  font-size: rem(24);
+  cursor: pointer;
+  }
+  &:hover{
+    transform:rotate(180deg);
+  }
+}

@@ -1,0 +1,62 @@
+.task{
+width: rem(300);
+background: #ffffff;
+border-radius: rem(9);
+color: $color-font;
+position: absolute;
+cursor:move;
+padding: rem(18);
+z-index:1;
+overflow: hidden;
+user-select: none;
+}
+
+.task-header{
+border-bottom: 1px solid $color-border;
+padding-bottom: rem(10);
+
+  &__title{
+  min-height: rem(28);
+  line-height:1;
+  }
+}
+
+.task__text{
+min-height: rem(25);
+margin-top: rem(6);
+}
+
+.task__author{
+margin-top: rem(10);
+text-align: right;
+min-height: rem(29);
+}
+
+.icon-edit{
+display: inline-block;
+position: relative;
+left: 100%;
+transform: translateX(-100%);
+}
+
+.icon-edit:before{
+content: '\f040';
+font-family: 'FontAwesome';
+color: $color-border;
+cursor: pointer;
+
+  &:hover{
+  color: red !important;
+  }
+}
+
+.resize{
+position: absolute;
+bottom:rem(-18);
+right:rem(-18);
+width: rem(32);
+height: rem(32);
+transform: rotate(45deg);
+background: $color-border;
+cursor: nwse-resize;
+}
